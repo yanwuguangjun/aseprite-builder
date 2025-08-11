@@ -52,7 +52,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-          os: [ macOS-13 ]
+          os: [ macOS-14 ]
         fail-fast: false
     steps:
       - name: Install Dependencies
@@ -83,11 +83,11 @@ jobs:
           export laf_backend=skia
           export enable_scripting=on
 
-          export skia_arch=x64
+          export skia_arch=arm64
 
           cmake -S . -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
-            -DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
             -DENABLE_TESTS=OFF \
             -DENABLE_SCRIPTING=$enable_scripting \
             -DENABLE_CCACHE=$enable_ccache \
