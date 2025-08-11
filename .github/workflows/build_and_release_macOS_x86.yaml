@@ -102,12 +102,15 @@ jobs:
         run: echo '# This file is here so Aseprite behaves as a portable program' > aseprite.ini
       - name: Create release
         working-directory: aseprite/build/bin
-        run: zip -r Aseprite-${{ needs.fetch-aseprite-info.outputs.release-tag }}-${{ runner.os }}-$(date +%Y%m%d-%H%M%S).zip *
+        run: |
+          TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+          zip -r "Aseprite-${{ needs.fetch-aseprite-info.outputs.release-tag }}-${{ runner.os }}-$TIMESTAMP.zip" *
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
       - name: Upload release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: aseprite/build/bin/Aseprite-${{ needs.fetch-aseprite-info.outputs.release-tag }}-${{ runner.os }}-$(date +%Y%m%d-%H%M%S).zip
-          asset_name: Aseprite-${{ needs.fetch-aseprite-info.outputs.release-tag }}-${{ runner.os }}-$(date +%Y%m%d-%H%M%S).zip
+          file: aseprite/build/bin/Aseprite-${{ needs.fetch-aseprite-info.outputs.release-tag }}-${{ runner.os }}-${{ env.TIMESTAMP }}.zip
+          asset_name: Aseprite-${{ needs.fetch-aseprite-info.outputs.release-tag }}-${{ runner.os }}-${{ env.TIMESTAMP }}.zip
           tag: ${{ needs.fetch-aseprite-info.outputs.release-tag }}
           overwrite: true
